@@ -9,6 +9,8 @@ public class ScreenManager
 
     public static List<ScreenObject> allScreen = new List<ScreenObject>();
 
+    public event Action isAllScreensInit;
+
     public List<ScreenObject> CurrentScreenOpen { get => _currentScreenOpen; }
 
     public void Init()
@@ -22,5 +24,7 @@ public class ScreenManager
         {
             allScreen[i].Init();
         }
+
+        isAllScreensInit?.Invoke();
     }
 }
