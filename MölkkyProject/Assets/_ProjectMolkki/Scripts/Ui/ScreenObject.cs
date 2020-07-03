@@ -79,6 +79,7 @@ public class ScreenObject : MonoBehaviour
 
         canvas.enabled = true;
         canvasGroup.interactable = true;
+        canvasGroup.alpha = 1;
 
         animator.SetBool(isAppearHash, isAppear);
 
@@ -109,6 +110,7 @@ public class ScreenObject : MonoBehaviour
     {
         canvasGroup.interactable = false;
         canvas.enabled = false;
+        canvasGroup.alpha = 0;
 
         animator.SetBool(isDisappearHash, false);
 

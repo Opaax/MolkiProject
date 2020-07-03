@@ -233,6 +233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c10d6c9cb4d05f4b9c38327448416da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainTitle: {fileID: 1236263755}
 --- !u!1 &427412865
 GameObject:
   m_ObjectHideFlags: 0
@@ -905,7 +906,7 @@ MonoBehaviour:
   m_pageToDisplay: 1
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
-    textComponent: {fileID: 511485016}
+    textComponent: {fileID: 744934901}
     characterCount: 5
     spriteCount: 0
     spaceCount: 0
@@ -1109,6 +1110,19 @@ MonoBehaviour:
   animator: {fileID: 1236263756}
   canvasGroup: {fileID: 1236263754}
   canvas: {fileID: 1236263753}
+  onAppear:
+    m_PersistentCalls:
+      m_Calls: []
+  onAppearEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  onDisappear:
+    m_PersistentCalls:
+      m_Calls: []
+  onDisappearEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  rulesButton: {fileID: 479165801}
 --- !u!95 &1236263756
 Animator:
   serializedVersion: 3
@@ -1369,7 +1383,7 @@ MonoBehaviour:
   m_pageToDisplay: 1
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
-    textComponent: {fileID: 511485016}
+    textComponent: {fileID: 1291552431}
     characterCount: 8
     spriteCount: 0
     spaceCount: 0
@@ -1516,7 +1530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.08788716, g: 0.22003968, b: 0.23584908, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

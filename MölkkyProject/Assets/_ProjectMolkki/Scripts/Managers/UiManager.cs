@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class UiManager : MonoBehaviour
 {
+    [Header("Screens")]
+    [SerializeField] ScreenObject mainTitle = null;
+
     private ScreenManager screenManager = new ScreenManager();
 
     private void Start()
@@ -16,6 +19,12 @@ public class UiManager : MonoBehaviour
 
     private void ScreenManager_AllScreenInit()
     {
-        this.Log("AllInit");
+        screenManager.isAllScreensInit -= ScreenManager_AllScreenInit;
+        AddTitleCard();
+    }
+
+    private void AddTitleCard()
+    {
+        mainTitle.Appear();
     }
 }
