@@ -14,11 +14,16 @@ public class MainTitle : ScreenObject
     public event Action OnRulesClicked;
     #endregion
 
+    public override void Appear()
+    {
+        base.Appear();
+
+        rulesButton.onClick.AddListener(OnClickedRules);
+    }
+
     public override void EndAppear()
     {
         base.EndAppear();
-
-        rulesButton.onClick.AddListener(OnClickedRules);
     }
 
     public override void Disappear()
@@ -30,8 +35,8 @@ public class MainTitle : ScreenObject
 
     private void OnClickedRules()
     {
-        OnRulesClicked?.Invoke();
+        Disappear();
 
-        EndAppear();
+        OnRulesClicked?.Invoke();
     }
 }
