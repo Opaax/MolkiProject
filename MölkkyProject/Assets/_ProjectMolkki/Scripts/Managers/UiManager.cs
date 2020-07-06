@@ -50,6 +50,15 @@ public class UiManager : MonoBehaviour
     private void AddRulesScreen ()
     {
         rulesScreen.Appear();
+
+        rulesScreen.OnBack += RulesScreen_OnBack;
+    }
+
+    private void RulesScreen_OnBack()
+    {
+        rulesScreen.OnBack -= RulesScreen_OnBack;
+
+        AddTitleCard();
     }
 
     private void OnDestroy()
