@@ -27,4 +27,15 @@ public class ScreenManager
 
         isAllScreensInit?.Invoke();
     }
+
+    public void AddActifScreen (ScreenObject screen)
+    {
+        _currentScreenOpen.Add(screen);
+    }
+
+    public void RemoveInactifScreen (ScreenObject screen)
+    {
+        if (_currentScreenOpen.Contains(screen))
+            _currentScreenOpen.Remove(screen);
+    }
 }
