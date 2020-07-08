@@ -8,6 +8,7 @@ public class UiManager : MonoBehaviour
     [Header("Screens")]
     [SerializeField] MainTitle mainTitle = null;
     [SerializeField] RulesScreen rulesScreen = null;
+    [SerializeField] PopUpNewGame popUpNewGame = null;
 
     private ScreenManager screenManager = new ScreenManager();
 
@@ -33,6 +34,16 @@ public class UiManager : MonoBehaviour
 
         mainTitle.OnDisappearEnd += MainTitle_OnDisappearEnd;
         mainTitle.OnRulesClicked += MainTitle_OnClickedRules;
+        mainTitle.OnNewGameClicked += MainTitle_OnNewGame;
+    }
+
+    private void MainTitle_OnNewGame()
+    {
+        mainTitle.OnDisappearEnd -= MainTitle_OnDisappearEnd;
+        mainTitle.OnRulesClicked -= MainTitle_OnClickedRules;
+        mainTitle.OnNewGameClicked -= MainTitle_OnNewGame;
+
+        AddPopUpNewGame();
     }
 
     private void MainTitle_OnClickedRules()
@@ -63,6 +74,26 @@ public class UiManager : MonoBehaviour
         rulesScreen.OnDisappearEnd += RulesScreen_OnDisappearEnd;
     }
 
+    private void AddPopUpNewGame()
+    {
+        popUpNewGame.Appear();
+
+        screenManager.AddActifScreen(popUpNewGame);
+
+        popUpNewGame.OnClosePopUp += NewGamePopUp_OnClose;
+    }
+
+    private void NewGamePopUp_OnClose()
+    {
+        popUpNewGame.OnClosePopUp -= NewGamePopUp_OnClose;
+
+        screenManager.RemoveInactifScreen(popUpNewGame);
+
+        mainTitle.OnDisappearEnd += MainTitle_OnDisappearEnd;
+        mainTitle.OnRulesClicked += MainTitle_OnClickedRules;
+        mainTitle.OnNewGameClicked += MainTitle_OnNewGame;
+    }
+
     private void RulesScreen_OnDisappearEnd(ScreenObject sender)
     {
         rulesScreen.OnBack -= RulesScreen_OnBack;
@@ -85,6 +116,8 @@ public class UiManager : MonoBehaviour
     {
         mainTitle.OnDisappearEnd -= MainTitle_OnDisappearEnd;
         mainTitle.OnRulesClicked -= MainTitle_OnClickedRules;
+        mainTitle.OnNewGameClicked -= MainTitle_OnNewGame;
+
         rulesScreen.OnBack -= RulesScreen_OnBack;
         rulesScreen.OnDisappearEnd -= RulesScreen_OnDisappearEnd;
     }
