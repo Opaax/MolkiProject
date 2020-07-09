@@ -3422,6 +3422,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   closeButton: {fileID: 475264490}
+  soloGame: {fileID: 1485368087}
+  teamGame: {fileID: 1034993264}
 --- !u!223 &1923036817
 Canvas:
   m_ObjectHideFlags: 0

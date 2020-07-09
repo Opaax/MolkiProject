@@ -19,13 +19,7 @@ public class UiManager : MonoBehaviour
         screenManager.Init();
     }
 
-    private void ScreenManager_AllScreenInit()
-    {
-        screenManager.isAllScreensInit -= ScreenManager_AllScreenInit;
-
-        AddMainTitle();
-    }
-
+    #region AddScreens
     private void AddMainTitle()
     {
         mainTitle.Appear();
@@ -37,6 +31,30 @@ public class UiManager : MonoBehaviour
         mainTitle.OnNewGameClicked += MainTitle_OnNewGame;
     }
 
+    private void AddRulesScreen()
+    {
+        rulesScreen.Appear();
+
+        screenManager.AddActifScreen(rulesScreen);
+
+        rulesScreen.OnBack += RulesScreen_OnBack;
+        rulesScreen.OnDisappearEnd += RulesScreen_OnDisappearEnd;
+    }
+
+    private void AddPopUpNewGame()
+    {
+        popUpNewGame.Appear();
+
+        screenManager.AddActifScreen(popUpNewGame);
+
+        popUpNewGame.OnClosePopUp += NewGamePopUp_OnClose;
+        popUpNewGame.OnSoloClicked += NewGamePopUp_SoloGame;
+        popUpNewGame.OnTeamClicked += NewGamePopUp_TeamGame;
+    }
+
+    #endregion
+
+    #region Main Title Methodes
     private void MainTitle_OnNewGame()
     {
         mainTitle.OnDisappearEnd -= MainTitle_OnDisappearEnd;
@@ -64,23 +82,33 @@ public class UiManager : MonoBehaviour
         screenManager.RemoveInactifScreen(sender);
     }
 
-    private void AddRulesScreen ()
+    #endregion
+
+    #region New Game Pop up Methodes
+    private void NewGamePopUp_TeamGame()
     {
-        rulesScreen.Appear();
+        popUpNewGame.OnClosePopUp -= NewGamePopUp_OnClose;
+        popUpNewGame.OnSoloClicked -= NewGamePopUp_SoloGame;
+        popUpNewGame.OnTeamClicked -= NewGamePopUp_TeamGame;
+        popUpNewGame.OnClosePopUp -= NewGamePopUp_OnClose;
 
-        screenManager.AddActifScreen(rulesScreen);
+        screenManager.RemoveInactifScreen(popUpNewGame);
+        screenManager.RemoveInactifScreen(mainTitle);
 
-        rulesScreen.OnBack += RulesScreen_OnBack;
-        rulesScreen.OnDisappearEnd += RulesScreen_OnDisappearEnd;
+        mainTitle.Disappear();
     }
 
-    private void AddPopUpNewGame()
+    private void NewGamePopUp_SoloGame()
     {
-        popUpNewGame.Appear();
+        popUpNewGame.OnClosePopUp -= NewGamePopUp_OnClose;
+        popUpNewGame.OnSoloClicked -= NewGamePopUp_SoloGame;
+        popUpNewGame.OnTeamClicked -= NewGamePopUp_TeamGame;
+        popUpNewGame.OnClosePopUp -= NewGamePopUp_OnClose;
 
-        screenManager.AddActifScreen(popUpNewGame);
+        screenManager.RemoveInactifScreen(popUpNewGame);
+        screenManager.RemoveInactifScreen(mainTitle);
 
-        popUpNewGame.OnClosePopUp += NewGamePopUp_OnClose;
+        mainTitle.Disappear();
     }
 
     private void NewGamePopUp_OnClose()
@@ -94,6 +122,19 @@ public class UiManager : MonoBehaviour
         mainTitle.OnNewGameClicked += MainTitle_OnNewGame;
     }
 
+    #endregion
+
+    #region Screen Manager Methodes
+    private void ScreenManager_AllScreenInit()
+    {
+        screenManager.isAllScreensInit -= ScreenManager_AllScreenInit;
+
+        AddMainTitle();
+    }
+
+    #endregion
+
+    #region RulesScreeen Methodes
     private void RulesScreen_OnDisappearEnd(ScreenObject sender)
     {
         rulesScreen.OnBack -= RulesScreen_OnBack;
@@ -112,6 +153,8 @@ public class UiManager : MonoBehaviour
         AddMainTitle();
     }
 
+    #endregion
+
     private void OnDestroy()
     {
         mainTitle.OnDisappearEnd -= MainTitle_OnDisappearEnd;
@@ -120,5 +163,10 @@ public class UiManager : MonoBehaviour
 
         rulesScreen.OnBack -= RulesScreen_OnBack;
         rulesScreen.OnDisappearEnd -= RulesScreen_OnDisappearEnd;
+
+        popUpNewGame.OnClosePopUp -= NewGamePopUp_OnClose;
+        popUpNewGame.OnSoloClicked -= NewGamePopUp_SoloGame;
+        popUpNewGame.OnTeamClicked -= NewGamePopUp_TeamGame;
+        popUpNewGame.OnClosePopUp -= NewGamePopUp_OnClose;
     }
 }
