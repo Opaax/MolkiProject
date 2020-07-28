@@ -10,6 +10,9 @@ public class PopUpObject : ScreenObject
     [Header("CloseButton")]
     [SerializeField] private Button closeButton = null;
 
+    #region
+    public event Action OnClosePopUp;
+    #endregion
     public override void Appear()
     {
         base.Appear();
@@ -19,13 +22,10 @@ public class PopUpObject : ScreenObject
 
     private void ClosePopUp()
     {
-        EndAppear();
-    }
-
-    public override void EndAppear()
-    {
-        base.EndAppear();
+        Disappear();
 
         closeButton.onClick.RemoveListener(ClosePopUp);
+
+        OnClosePopUp?.Invoke();
     }
 }

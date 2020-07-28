@@ -9,9 +9,11 @@ public class MainTitle : ScreenObject
     [Space]
     [Header("Buttons")]
     [SerializeField] private Button rulesButton = null;
+    [SerializeField] private Button newGameButton = null;
 
     #region events
     public event Action OnRulesClicked;
+    public event Action OnNewGameClicked;
     #endregion
 
     public override void Appear()
@@ -19,6 +21,7 @@ public class MainTitle : ScreenObject
         base.Appear();
 
         rulesButton.onClick.AddListener(OnClickedRules);
+        newGameButton.onClick.AddListener(OnClickedNewGame);
     }
 
     public override void EndAppear()
@@ -30,7 +33,8 @@ public class MainTitle : ScreenObject
     {
         base.Disappear();
 
-        rulesButton.onClick.RemoveListener(OnClickedRules);
+        rulesButton.onClick.RemoveListener(OnClickedRules); 
+        newGameButton.onClick.RemoveListener(OnClickedNewGame);
     }
 
     private void OnClickedRules()
@@ -38,5 +42,10 @@ public class MainTitle : ScreenObject
         Disappear();
 
         OnRulesClicked?.Invoke();
+    }
+
+    private void OnClickedNewGame()
+    {
+        OnNewGameClicked?.Invoke();
     }
 }
