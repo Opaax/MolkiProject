@@ -9,6 +9,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] MainTitle mainTitle = null;
     [SerializeField] RulesScreen rulesScreen = null;
     [SerializeField] PopUpNewGame popUpNewGame = null;
+    [SerializeField] SoloScreen soloScreen = null;
 
     private ScreenManager screenManager = new ScreenManager();
 
@@ -50,6 +51,14 @@ public class UiManager : MonoBehaviour
         popUpNewGame.OnClosePopUp += NewGamePopUp_OnClose;
         popUpNewGame.OnSoloClicked += NewGamePopUp_SoloGame;
         popUpNewGame.OnTeamClicked += NewGamePopUp_TeamGame;
+    }
+
+    private void AddSoloScreenGame ()
+    {
+        soloScreen.Appear();
+
+        screenManager.AddActifScreen(soloScreen);
+
     }
 
     #endregion
@@ -109,6 +118,8 @@ public class UiManager : MonoBehaviour
         screenManager.RemoveInactifScreen(mainTitle);
 
         mainTitle.Disappear();
+
+        AddSoloScreenGame();
     }
 
     private void NewGamePopUp_OnClose()

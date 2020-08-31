@@ -26,14 +26,14 @@ public class PopUpNewGame : PopUpObject
 
     private void TeamGameOnClicked()
     {
-        OnSoloClicked?.Invoke();
+        OnTeamClicked?.Invoke();
 
         Disappear();
     }
 
     private void SoloGameOnClicked()
     {
-        OnTeamClicked?.Invoke();
+        OnSoloClicked?.Invoke();
 
         Disappear();
     }
