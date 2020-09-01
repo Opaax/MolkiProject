@@ -17,10 +17,10 @@ public class ScreenObject : MonoBehaviour
     [SerializeField] protected Canvas canvas = null;
     [Space]
     [Header("UnityEvent")]
-    [SerializeField] private UnityEvent onAppear;
-    [SerializeField] private UnityEvent onAppearEnd;
-    [SerializeField] private UnityEvent onDisappear;
-    [SerializeField] private UnityEvent onDisappearEnd;
+    [SerializeField] private UnityEvent onAppear = default;
+    [SerializeField] private UnityEvent onAppearEnd = default;
+    [SerializeField] private UnityEvent onDisappear = default;
+    [SerializeField] private UnityEvent onDisappearEnd = default;
 
     [Header("HashAnimation")]
     protected static readonly int isAppearHash = Animator.StringToHash("IsAppear");
