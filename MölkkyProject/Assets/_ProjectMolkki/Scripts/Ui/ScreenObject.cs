@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public delegate void ScreenObjectEventHandler(ScreenObject sender);
 
-[RequireComponent(typeof(Animator),typeof(CanvasGroup),typeof(Canvas))]
+[RequireComponent(typeof(Animator),typeof(CanvasGroup),typeof(Canvas)),RequireComponent(typeof(GraphicRaycaster))]
 public class ScreenObject : MonoBehaviour
 {
     [Header("Animation")]

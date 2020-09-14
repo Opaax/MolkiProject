@@ -18,7 +18,11 @@ public class SoloScreen : ScreenObject
     
     private float baseSizeScroolZone = default;
     private float distanceBetweenLastInfoAddButton = default;  
-    private float distanceBetweenInfo = default;  
+    private float distanceBetweenInfo = default;
+
+    public event Action<PlayerInfo> onPlayerInfoClicked = default;
+    public event Action OnCantRemove = default;
+    public event Action OnRemove = default;
 
     public override void EndAppear()
     {
@@ -26,8 +30,32 @@ public class SoloScreen : ScreenObject
 
         addPlayerButton.onClick.AddListener(AddPlayer);
 
+        GetEventPlayerInfo();
+
         ComputeDistanceBetweenAddButtonLastPlayerInfo();
         ComputeBaseSizeScroolZone();
+    }
+
+    private void GetEventPlayerInfo()
+    {
+        for (int i = playerInfoList.Count - 1; i >= 0; i--)
+        {
+            playerInfoList[i].onPlayerInfoClicked += PlayerInfo_OnClicked;
+        }
+    }
+
+    private void RemoveAllEventPlayerInfo()
+    {
+        for (int i = playerInfoList.Count - 1; i >= 0; i--)
+        {
+            playerInfoList[i].onPlayerInfoClicked -= onPlayerInfoClicked;
+        }
+    }
+
+    private void PlayerInfo_OnClicked(PlayerInfo clickedPlayer)
+    {
+        addPlayerButton.onClick.RemoveListener(AddPlayer);
+        onPlayerInfoClicked?.Invoke(clickedPlayer);
     }
 
     private void ComputeDistanceBetweenAddButtonLastPlayerInfo()
@@ -47,7 +75,6 @@ public class SoloScreen : ScreenObject
         baseSizeScroolZone = lRectTransform.sizeDelta.y;
     }
 
-
     private void AddPlayer()
     {
         GameObject lLastInfoObject = Instantiate(playerInfo,parentContener);
@@ -62,7 +89,63 @@ public class SoloScreen : ScreenObject
 
         playerInfoList.Add(lNewPlayerInfo);
 
+        lNewPlayerInfo.onPlayerInfoClicked += PlayerInfo_OnClicked;
+
         ComputeScrollZone();
+    }
+
+    public void RemovePlayer(PlayerInfo playerInfoToRemove)
+    {
+        int lIndexToRemove = 0;
+
+        if(CheckRemovingPlayer())
+        {
+            playerInfoToRemove.onPlayerInfoClicked -= PlayerInfo_OnClicked;
+
+            lIndexToRemove = playerInfoList.IndexOf(playerInfoToRemove);
+
+            playerInfoList.RemoveAt(lIndexToRemove);
+
+            Destroy(playerInfoToRemove.gameObject);
+
+            ReplaceAllPlayerInfo(lIndexToRemove);
+            ReplaceButtonAdd();
+            ComputeScrollZone();
+
+            OnRemove?.Invoke();
+        }
+        else
+        {
+            OnCantRemove?.Invoke();
+        }
+    }
+
+    public void OnPopUpEnd()
+    {
+        addPlayerButton.onClick.AddListener(AddPlayer);
+    }
+
+    private void ReplaceButtonAdd()
+    {
+        RectTransform lButtonParent = addPlayerButton.transform.parent as RectTransform;
+
+        lButtonParent.position = playerInfoList[playerInfoList.Count-1].Rect.position + new Vector3(0, distanceBetweenLastInfoAddButton, 0);
+    }
+
+    private void ReplaceAllPlayerInfo(int fromIndexToReplace)
+    {
+        for (int i = playerInfoList.Count - 1; i >= 0; i--)
+        {
+            if(i >= fromIndexToReplace)
+            {
+                playerInfoList[i].Rect.position = playerInfoList[i].Rect.position + new Vector3(0, distanceBetweenInfo, 0);
+            }
+        }
+    }
+
+    private bool CheckRemovingPlayer()
+    {
+        return playerInfoList.Count > 2;
     }
 
     private void ComputeScrollZone ()
@@ -77,14 +160,10 @@ public class SoloScreen : ScreenObject
             float lFinalSize = lYAddButton + 80 + 20;
             float lPrevSize = lScroolZone.sizeDelta.y;
 
-            this.Log("FinalSize " + lFinalSize);
-            this.Log("Prev " + lPrevSize);
-            this.Log("Compute " + (lFinalSize - lPrevSize));
-
             lScroolZone.sizeDelta = new Vector2(lScroolZone.sizeDelta.x, lFinalSize);
             lScroolZone.DOAnchorPosY(lScroolZone.anchoredPosition.y + (lFinalSize - lPrevSize), 0.3f).OnComplete(() =>
             {
-                Debug.Log("Complete");
+                
             });
         }
     }
