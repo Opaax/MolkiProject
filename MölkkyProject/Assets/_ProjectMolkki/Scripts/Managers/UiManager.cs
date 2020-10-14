@@ -63,7 +63,16 @@ public class UiManager : MonoBehaviour
 
         screenManager.AddActifScreen(soloScreen);
 
-        soloScreen.onPlayerInfoClicked += SoloScreen_OnPlayerInfoClicked;
+        soloScreen.OnPlayerInfoClicked += SoloScreen_OnPlayerInfoClicked;
+        soloScreen.OnPlay += SoloScreen_OnPlayClicked;
+    }
+
+    private void SoloScreen_OnPlayClicked(bool isStartGame)
+    {
+        if(!isStartGame)
+        {
+            soloScreen.ResetEvent();
+        }
     }
 
     private void AddPopUpPlayerInfo()
@@ -108,8 +117,9 @@ public class UiManager : MonoBehaviour
 
         screenManager.RemoveInactifScreen(popUpPlayerInfo);
 
-        soloScreen.onPlayerInfoClicked += SoloScreen_OnPlayerInfoClicked;
+        soloScreen.OnPlayerInfoClicked += SoloScreen_OnPlayerInfoClicked;
         soloScreen.OnPopUpEnd();
+        soloScreen.ResetEvent();
     }
 
     #endregion
@@ -176,6 +186,8 @@ public class UiManager : MonoBehaviour
     private void NewGamePopUp_OnClose()
     {
         popUpNewGame.OnClosePopUp -= NewGamePopUp_OnClose;
+        popUpNewGame.OnSoloClicked -= NewGamePopUp_SoloGame;
+        popUpNewGame.OnTeamClicked -= NewGamePopUp_TeamGame;
 
         screenManager.RemoveInactifScreen(popUpNewGame);
 
@@ -223,7 +235,7 @@ public class UiManager : MonoBehaviour
         AddPopUpPlayerInfo();
         popUpPlayerInfo.SetPlayerInfo(playerClicked);
 
-        soloScreen.onPlayerInfoClicked -= SoloScreen_OnPlayerInfoClicked;
+        soloScreen.OnPlayerInfoClicked -= SoloScreen_OnPlayerInfoClicked;
     }
 
     #endregion
@@ -243,12 +255,11 @@ public class UiManager : MonoBehaviour
         popUpNewGame.OnClosePopUp -= NewGamePopUp_OnClose;
         popUpNewGame.OnSoloClicked -= NewGamePopUp_SoloGame;
         popUpNewGame.OnTeamClicked -= NewGamePopUp_TeamGame;
-        popUpNewGame.OnClosePopUp -= NewGamePopUp_OnClose;
 
         popUpPlayerInfo.OnClosePopUp -= popUpPlayerInfo_OnClose;
         popUpPlayerInfo.onRemoveClicked -= popUpPlayerInfo_OnRemove;
 
-        soloScreen.onPlayerInfoClicked -= SoloScreen_OnPlayerInfoClicked;
+        soloScreen.OnPlayerInfoClicked -= SoloScreen_OnPlayerInfoClicked;
         soloScreen.OnRemove -= SoloScreen_OnRemovingPlayer;
         soloScreen.OnCantRemove -= SoloScreen_OnCantRemovingPlayer;
     }

@@ -15,14 +15,18 @@ public class SoloScreen : ScreenObject
     [SerializeField] private Button addPlayerButton = null;
     [SerializeField] private GameObject playerInfo = null;
     [SerializeField] private Transform parentContener = null;
+    [Space]
+    [Header("buttons")]
+    [SerializeField] private Button playButton = null;
     
     private float baseSizeScroolZone = default;
     private float distanceBetweenLastInfoAddButton = default;  
     private float distanceBetweenInfo = default;
 
-    public event Action<PlayerInfo> onPlayerInfoClicked = default;
+    public event Action<PlayerInfo> OnPlayerInfoClicked = default;
     public event Action OnCantRemove = default;
     public event Action OnRemove = default;
+    public event Action<bool> OnPlay = default;
 
     public override void EndAppear()
     {
@@ -31,9 +35,55 @@ public class SoloScreen : ScreenObject
         addPlayerButton.onClick.AddListener(AddPlayer);
 
         GetEventPlayerInfo();
+        AddButtonEvent();
 
         ComputeDistanceBetweenAddButtonLastPlayerInfo();
         ComputeBaseSizeScroolZone();
+    }
+
+    private void AddButtonEvent ()
+    {
+        playButton.onClick.AddListener(OnPlayClicked);
+    }
+
+    private void RemoveButtonEvent ()
+    {
+        playButton.onClick.RemoveListener(OnPlayClicked);
+    }
+
+    private void OnPlayClicked()
+    {
+        RemoveButtonEvent();
+
+        if (AllPlayerCheck())
+        {
+            OnPlay.Invoke(true);
+        }
+        else
+        {
+            OnPlay.Invoke(false);
+        }
+    }
+
+    private bool AllPlayerCheck()
+    {
+        for (int i = playerInfoList.Count - 1; i >= 0; i--)
+        {
+            if (playerInfoList[i].IsReady) continue;
+            else
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void ResetEvent()
+    {
+        this.Log("Can't start the game");
+
+        AddButtonEvent();
     }
 
     private void GetEventPlayerInfo()
@@ -48,14 +98,16 @@ public class SoloScreen : ScreenObject
     {
         for (int i = playerInfoList.Count - 1; i >= 0; i--)
         {
-            playerInfoList[i].onPlayerInfoClicked -= onPlayerInfoClicked;
+            playerInfoList[i].onPlayerInfoClicked -= OnPlayerInfoClicked;
         }
     }
 
     private void PlayerInfo_OnClicked(PlayerInfo clickedPlayer)
     {
         addPlayerButton.onClick.RemoveListener(AddPlayer);
-        onPlayerInfoClicked?.Invoke(clickedPlayer);
+        OnPlayerInfoClicked?.Invoke(clickedPlayer);
+
+        RemoveButtonEvent();
     }
 
     private void ComputeDistanceBetweenAddButtonLastPlayerInfo()
