@@ -54,6 +54,7 @@ public class SoloScreen : ScreenObject
     private void OnPlayClicked()
     {
         RemoveButtonEvent();
+        RemoveAllEventPlayerInfo();
 
         if (AllPlayerCheck())
         {

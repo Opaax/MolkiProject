@@ -13,6 +13,7 @@ public class UiManager : MonoBehaviour
     [Header("PopUp")]
     [SerializeField] PopUpNewGame popUpNewGame = null;
     [SerializeField] PopUpSetPlayerInfo popUpPlayerInfo = null;
+    [SerializeField] PopUpAllPlayerNotSet popUpAllPlayerNotSet = null;
 
 
     private ScreenManager screenManager = new ScreenManager();
@@ -67,18 +68,6 @@ public class UiManager : MonoBehaviour
         soloScreen.OnPlay += SoloScreen_OnPlayClicked;
     }
 
-    private void SoloScreen_OnPlayClicked(bool isStartGame)
-    {
-        if(!isStartGame)
-        {
-            soloScreen.ResetEventButton();
-
-            this.Log("Can't start, all player are set");
-        }
-
-        this.Log("Let's start");
-    }
-
     private void AddPopUpPlayerInfo()
     {
         popUpPlayerInfo.Appear();
@@ -89,42 +78,13 @@ public class UiManager : MonoBehaviour
         popUpPlayerInfo.onRemoveClicked += popUpPlayerInfo_OnRemove;
     }
 
-    private void popUpPlayerInfo_OnRemove(PlayerInfo playerInfoToRemove)
+    private void AddPopUpAllPlayerNotSet()
     {
-        popUpPlayerInfo.onRemoveClicked -= popUpPlayerInfo_OnRemove;
+        popUpAllPlayerNotSet.Appear();
 
-        soloScreen.OnRemove += SoloScreen_OnRemovingPlayer;
-        soloScreen.OnCantRemove += SoloScreen_OnCantRemovingPlayer;
+        screenManager.AddActifScreen(popUpAllPlayerNotSet);
 
-        soloScreen.RemovePlayer(playerInfoToRemove);
-    }
-
-    private void SoloScreen_OnCantRemovingPlayer()
-    {
-        soloScreen.OnRemove -= SoloScreen_OnRemovingPlayer;
-        soloScreen.OnCantRemove -= SoloScreen_OnCantRemovingPlayer;
-
-        this.Log("player can't be remove, you need at least two player");
-    }
-
-    private void SoloScreen_OnRemovingPlayer()
-    {
-        soloScreen.OnRemove -= SoloScreen_OnRemovingPlayer;
-        soloScreen.OnCantRemove -= SoloScreen_OnCantRemovingPlayer;
-
-        this.Log("player is removed");
-    }
-
-    private void popUpPlayerInfo_OnClose()
-    {
-        popUpPlayerInfo.OnClosePopUp -= popUpPlayerInfo_OnClose;
-        popUpPlayerInfo.onRemoveClicked -= popUpPlayerInfo_OnRemove;
-
-        screenManager.RemoveInactifScreen(popUpPlayerInfo);
-
-        soloScreen.OnPlayerInfoClicked += SoloScreen_OnPlayerInfoClicked;
-        soloScreen.ResetEventButton();
-        soloScreen.ResetEventPlayerInfo();
+        popUpAllPlayerNotSet.OnClosePopUp += popUpAllPlayerNotSet_OnClose;
     }
 
     #endregion
@@ -243,9 +203,72 @@ public class UiManager : MonoBehaviour
         soloScreen.OnPlayerInfoClicked -= SoloScreen_OnPlayerInfoClicked;
     }
 
+    private void SoloScreen_OnPlayClicked(bool isStartGame)
+    {
+        if (!isStartGame)
+        {
+            AddPopUpAllPlayerNotSet();
+            this.Log("Can't start, all player are set");
+        }
+        else
+        {
+            this.Log("Let's start");
+
+        }
+    }
+
+    private void SoloScreen_OnCantRemovingPlayer()
+    {
+        soloScreen.OnRemove -= SoloScreen_OnRemovingPlayer;
+        soloScreen.OnCantRemove -= SoloScreen_OnCantRemovingPlayer;
+
+        this.Log("player can't be remove, you need at least two player");
+    }
+
+    private void SoloScreen_OnRemovingPlayer()
+    {
+        soloScreen.OnRemove -= SoloScreen_OnRemovingPlayer;
+        soloScreen.OnCantRemove -= SoloScreen_OnCantRemovingPlayer;
+
+        this.Log("player is removed");
+    }
     #endregion
 
     #region popUpPlayerInfo Methodes
+    private void popUpPlayerInfo_OnClose()
+    {
+        popUpPlayerInfo.OnClosePopUp -= popUpPlayerInfo_OnClose;
+        popUpPlayerInfo.onRemoveClicked -= popUpPlayerInfo_OnRemove;
+
+        screenManager.RemoveInactifScreen(popUpPlayerInfo);
+
+        soloScreen.OnPlayerInfoClicked += SoloScreen_OnPlayerInfoClicked;
+        soloScreen.ResetEventButton();
+        soloScreen.ResetEventPlayerInfo();
+    }
+
+    private void popUpPlayerInfo_OnRemove(PlayerInfo playerInfoToRemove)
+    {
+        popUpPlayerInfo.onRemoveClicked -= popUpPlayerInfo_OnRemove;
+
+        soloScreen.OnRemove += SoloScreen_OnRemovingPlayer;
+        soloScreen.OnCantRemove += SoloScreen_OnCantRemovingPlayer;
+
+        soloScreen.RemovePlayer(playerInfoToRemove);
+    }
+
+    #endregion
+
+    #region popUpAllPlayerNotSet
+    private void popUpAllPlayerNotSet_OnClose()
+    {
+        popUpAllPlayerNotSet.OnClosePopUp -= popUpAllPlayerNotSet_OnClose;
+
+        screenManager.RemoveInactifScreen(popUpAllPlayerNotSet);
+
+        soloScreen.ResetEventButton();
+        soloScreen.ResetEventPlayerInfo();
+    }
     #endregion
 
     private void OnDestroy()
@@ -265,7 +288,10 @@ public class UiManager : MonoBehaviour
         popUpPlayerInfo.onRemoveClicked -= popUpPlayerInfo_OnRemove;
 
         soloScreen.OnPlayerInfoClicked -= SoloScreen_OnPlayerInfoClicked;
+        soloScreen.OnPlay -= SoloScreen_OnPlayClicked;
         soloScreen.OnRemove -= SoloScreen_OnRemovingPlayer;
         soloScreen.OnCantRemove -= SoloScreen_OnCantRemovingPlayer;
+
+        popUpAllPlayerNotSet.OnClosePopUp -= popUpAllPlayerNotSet_OnClose;
     }
 }
