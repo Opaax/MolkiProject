@@ -72,7 +72,11 @@ public class UiManager : MonoBehaviour
         if(!isStartGame)
         {
             soloScreen.ResetEventButton();
+
+            this.Log("Can't start, all player are set");
         }
+
+        this.Log("Let's start");
     }
 
     private void AddPopUpPlayerInfo()
