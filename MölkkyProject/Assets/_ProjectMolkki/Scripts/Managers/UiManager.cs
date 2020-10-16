@@ -71,7 +71,7 @@ public class UiManager : MonoBehaviour
     {
         if(!isStartGame)
         {
-            soloScreen.ResetEvent();
+            soloScreen.ResetEventButton();
         }
     }
 
@@ -114,12 +114,13 @@ public class UiManager : MonoBehaviour
     private void popUpPlayerInfo_OnClose()
     {
         popUpPlayerInfo.OnClosePopUp -= popUpPlayerInfo_OnClose;
+        popUpPlayerInfo.onRemoveClicked -= popUpPlayerInfo_OnRemove;
 
         screenManager.RemoveInactifScreen(popUpPlayerInfo);
 
         soloScreen.OnPlayerInfoClicked += SoloScreen_OnPlayerInfoClicked;
-        soloScreen.OnPopUpEnd();
-        soloScreen.ResetEvent();
+        soloScreen.ResetEventButton();
+        soloScreen.ResetEventPlayerInfo();
     }
 
     #endregion

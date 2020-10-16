@@ -32,8 +32,6 @@ public class SoloScreen : ScreenObject
     {
         base.EndAppear();
 
-        addPlayerButton.onClick.AddListener(AddPlayer);
-
         GetEventPlayerInfo();
         AddButtonEvent();
 
@@ -44,11 +42,13 @@ public class SoloScreen : ScreenObject
     private void AddButtonEvent ()
     {
         playButton.onClick.AddListener(OnPlayClicked);
+        addPlayerButton.onClick.AddListener(AddPlayer);
     }
 
     private void RemoveButtonEvent ()
     {
         playButton.onClick.RemoveListener(OnPlayClicked);
+        addPlayerButton.onClick.RemoveListener(AddPlayer);
     }
 
     private void OnPlayClicked()
@@ -79,11 +79,14 @@ public class SoloScreen : ScreenObject
         return true;
     }
 
-    public void ResetEvent()
+    public void ResetEventButton()
     {
-        this.Log("Can't start the game");
-
         AddButtonEvent();
+    }
+
+    public void ResetEventPlayerInfo()
+    {
+        GetEventPlayerInfo();
     }
 
     private void GetEventPlayerInfo()
@@ -98,16 +101,16 @@ public class SoloScreen : ScreenObject
     {
         for (int i = playerInfoList.Count - 1; i >= 0; i--)
         {
-            playerInfoList[i].onPlayerInfoClicked -= OnPlayerInfoClicked;
+            playerInfoList[i].onPlayerInfoClicked -= PlayerInfo_OnClicked;
         }
     }
 
     private void PlayerInfo_OnClicked(PlayerInfo clickedPlayer)
     {
-        addPlayerButton.onClick.RemoveListener(AddPlayer);
         OnPlayerInfoClicked?.Invoke(clickedPlayer);
 
         RemoveButtonEvent();
+        RemoveAllEventPlayerInfo();
     }
 
     private void ComputeDistanceBetweenAddButtonLastPlayerInfo()
@@ -172,11 +175,6 @@ public class SoloScreen : ScreenObject
         }
     }
 
-    public void OnPopUpEnd()
-    {
-        addPlayerButton.onClick.AddListener(AddPlayer);
-    }
-
     private void ReplaceButtonAdd()
     {
         RectTransform lButtonParent = addPlayerButton.transform.parent as RectTransform;
@@ -216,6 +214,23 @@ public class SoloScreen : ScreenObject
             lScroolZone.DOAnchorPosY(lScroolZone.anchoredPosition.y + (lFinalSize - lPrevSize), 0.3f).OnComplete(() =>
             {
                 
+            });
+        }
+        else
+        {
+            float lFinalSize = lYAddButton + 80;
+            float lPrevSize = lScroolZone.sizeDelta.y;
+
+            if (lFinalSize < baseSizeScroolZone)
+            {
+                lScroolZone.sizeDelta = new Vector2(lScroolZone.sizeDelta.x, baseSizeScroolZone);
+                return;
+            }
+
+            lScroolZone.sizeDelta = new Vector2(lScroolZone.sizeDelta.x, lFinalSize);
+            lScroolZone.DOAnchorPosY(lScroolZone.anchoredPosition.y + (lFinalSize - lPrevSize), 0.3f).OnComplete(() =>
+            {
+
             });
         }
     }
