@@ -80,11 +80,11 @@ public class UiManager : MonoBehaviour
 
     private void AddPopUpAllPlayerNotSet()
     {
+        popUpAllPlayerNotSet.OnClosePopUp += popUpAllPlayerNotSet_OnClose;
+
         popUpAllPlayerNotSet.Appear();
 
         screenManager.AddActifScreen(popUpAllPlayerNotSet);
-
-        popUpAllPlayerNotSet.OnClosePopUp += popUpAllPlayerNotSet_OnClose;
     }
 
     #endregion

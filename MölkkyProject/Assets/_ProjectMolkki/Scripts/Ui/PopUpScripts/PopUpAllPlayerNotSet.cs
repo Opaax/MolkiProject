@@ -1,22 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PopUpAllPlayerNotSet : PopUpObject
 {
-
-    public override void Appear()
+    PointerEventData pointer ;
+    private void Start()
     {
-        base.Appear();
-
-        Debug.Log("AppearAllPlayerNotSet");
-
+        pointer = new PointerEventData(EventSystem.current);
     }
-
-    protected override void ClosePopUp()
+    private void Update()
     {
-        base.ClosePopUp();
-
-        Debug.Log("CloseAllPlayerNotSet");
+            Debug.Log(pointer.pointerCurrentRaycast.gameObject);
     }
 }
