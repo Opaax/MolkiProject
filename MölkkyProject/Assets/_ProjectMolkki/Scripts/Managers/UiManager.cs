@@ -212,8 +212,8 @@ public class UiManager : MonoBehaviour
         }
         else
         {
+            RemoveSoloScreen();
             this.Log("Let's start");
-
         }
     }
 
@@ -231,6 +231,16 @@ public class UiManager : MonoBehaviour
         soloScreen.OnCantRemove -= SoloScreen_OnCantRemovingPlayer;
 
         this.Log("player is removed");
+    }
+
+    private void RemoveSoloScreen ()
+    {
+        soloScreen.OnPlayerInfoClicked -= SoloScreen_OnPlayerInfoClicked;
+        soloScreen.OnPlay -= SoloScreen_OnPlayClicked;
+
+        screenManager.RemoveInactifScreen(soloScreen);
+
+        soloScreen.Disappear();
     }
     #endregion
 

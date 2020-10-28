@@ -23,6 +23,8 @@ public class SoloScreen : ScreenObject
     private float distanceBetweenLastInfoAddButton = default;  
     private float distanceBetweenInfo = default;
 
+    public List<PlayerInfo> PlayerInfoList { get => playerInfoList; }
+
     public event Action<PlayerInfo> OnPlayerInfoClicked = default;
     public event Action OnCantRemove = default;
     public event Action OnRemove = default;
