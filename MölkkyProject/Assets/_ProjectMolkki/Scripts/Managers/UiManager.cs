@@ -9,6 +9,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] MainTitle mainTitle = null;
     [SerializeField] RulesScreen rulesScreen = null;
     [SerializeField] SoloScreen soloScreen = null;
+    [SerializeField] SoloGameScreen soloGameScreen = null;
     [Space]
     [Header("PopUp")]
     [SerializeField] PopUpNewGame popUpNewGame = null;
@@ -66,6 +67,13 @@ public class UiManager : MonoBehaviour
 
         soloScreen.OnPlayerInfoClicked += SoloScreen_OnPlayerInfoClicked;
         soloScreen.OnPlay += SoloScreen_OnPlayClicked;
+    }
+
+    private void AddSoloGameScreen()
+    {
+        soloGameScreen.Appear();
+
+        screenManager.AddActifScreen(soloGameScreen);
     }
 
     private void AddPopUpPlayerInfo()
@@ -214,6 +222,8 @@ public class UiManager : MonoBehaviour
         {
             RemoveSoloScreen();
             this.Log("Let's start");
+
+            AddSoloGameScreen();
         }
     }
 
