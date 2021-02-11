@@ -12,6 +12,6 @@ public class PopUpAllPlayerNotSet : PopUpObject
     }
     private void Update()
     {
-            Debug.Log(pointer.pointerCurrentRaycast.gameObject);
+
     }
 }

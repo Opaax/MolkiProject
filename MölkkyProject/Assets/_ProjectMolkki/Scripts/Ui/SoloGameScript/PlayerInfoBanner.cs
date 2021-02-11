@@ -6,10 +6,15 @@ using UnityEngine;
 public class PlayerInfoBanner : MonoBehaviour
 {
     [Header("TextInfos")]
-    [SerializeField] private TextMeshPro nameText = null;
-    [SerializeField] private TextMeshPro scoreText = null;
+    [SerializeField] private TextMeshProUGUI nameText = null;
+    [SerializeField] private TextMeshProUGUI scoreText = null;
+    [Space]
+    [Header("Transform")]
+    [SerializeField] private RectTransform _rect = null;
 
-    private void InitBannerInfo(string nameInfo, string scoreInfo)
+    public RectTransform Rect { get => _rect;}
+
+    public void InitBannerInfo(string nameInfo, string scoreInfo)
     {
         nameText.text = nameInfo;
         scoreText.text = scoreInfo;

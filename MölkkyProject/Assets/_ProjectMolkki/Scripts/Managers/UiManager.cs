@@ -71,6 +71,7 @@ public class UiManager : MonoBehaviour
 
     private void AddSoloGameScreen()
     {
+        soloGameScreen.OnAppearEnd += SoloScreenGame_OnEndAppear;
         soloGameScreen.Appear();
 
         screenManager.AddActifScreen(soloGameScreen);
@@ -216,7 +217,7 @@ public class UiManager : MonoBehaviour
         if (!isStartGame)
         {
             AddPopUpAllPlayerNotSet();
-            this.Log("Can't start, all player are set");
+            this.Log("Can't start, all player are not set");
         }
         else
         {
@@ -291,6 +292,15 @@ public class UiManager : MonoBehaviour
     }
     #endregion
 
+    #region SoloGameScreen Methodes
+    private void SoloScreenGame_OnEndAppear(ScreenObject sender)
+    {
+        soloGameScreen.OnAppearEnd -= SoloScreenGame_OnEndAppear;
+
+        soloGameScreen.InitPlayer(soloScreen.PlayerInfoList);
+    }
+    #endregion
+
     private void OnDestroy()
     {
         mainTitle.OnDisappearEnd -= MainTitle_OnDisappearEnd;
@@ -313,5 +323,7 @@ public class UiManager : MonoBehaviour
         soloScreen.OnCantRemove -= SoloScreen_OnCantRemovingPlayer;
 
         popUpAllPlayerNotSet.OnClosePopUp -= popUpAllPlayerNotSet_OnClose;
+
+        soloGameScreen.OnAppearEnd -= SoloScreenGame_OnEndAppear;
     }
 }
