@@ -72,6 +72,7 @@ public class UiManager : MonoBehaviour
     private void AddSoloGameScreen()
     {
         soloGameScreen.OnAppearEnd += SoloScreenGame_OnEndAppear;
+
         soloGameScreen.Appear();
 
         screenManager.AddActifScreen(soloGameScreen);
@@ -297,7 +298,27 @@ public class UiManager : MonoBehaviour
     {
         soloGameScreen.OnAppearEnd -= SoloScreenGame_OnEndAppear;
 
+        soloGameScreen.onPointClicked += SoloScreenGame_OnPointClicked;
+        soloGameScreen.onQuitClicked += SoloScreenGame_OnQuitClicked;
+        soloGameScreen.onMissedClicked += SoloScreenGame_OnMissedClicked;
+
         soloGameScreen.InitPlayer(soloScreen.PlayerInfoList);
+        soloGameScreen.InitButtons();
+    }
+
+    private void SoloScreenGame_OnMissedClicked()
+    {
+        this.Log("OnMissedClicked");
+    }
+
+    private void SoloScreenGame_OnQuitClicked()
+    {
+        this.Log("OnQuitClicked");
+    }
+
+    private void SoloScreenGame_OnPointClicked(int point)
+    {
+        this.Log(string.Format("on{0}PointClicked", point));
     }
     #endregion
 
@@ -325,5 +346,8 @@ public class UiManager : MonoBehaviour
         popUpAllPlayerNotSet.OnClosePopUp -= popUpAllPlayerNotSet_OnClose;
 
         soloGameScreen.OnAppearEnd -= SoloScreenGame_OnEndAppear;
+        soloGameScreen.onPointClicked -= SoloScreenGame_OnPointClicked;
+        soloGameScreen.onQuitClicked -= SoloScreenGame_OnQuitClicked;
+        soloGameScreen.onMissedClicked -= SoloScreenGame_OnMissedClicked;
     }
 }
