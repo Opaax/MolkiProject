@@ -31,6 +31,8 @@ public class PlayerInfo : MonoBehaviour
     private string _pseudo = default;
     private string _defaultString = "Click Here";
 
+    private int _score = 0;
+
     public event Action<PlayerInfo> onPlayerInfoClicked = default;
 
     public RectTransform Rect { get => rect; set => rect = value; }
@@ -38,6 +40,7 @@ public class PlayerInfo : MonoBehaviour
     public string Pseudo { get => _pseudo; set { _pseudo = value; UpdatePseudo(_pseudo);} }
     public string DefaultString { get => _defaultString; set => _defaultString = value; }
     public bool IsReady { get => _isReady; set => _isReady = value; }
+    public int Score { get => _score; set => _score = value; }
 
     private void Start()
     {

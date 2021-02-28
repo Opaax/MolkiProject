@@ -39,7 +39,7 @@ public class SoloGameScreen : ScreenObject
             GameObject lPlayerInfoBannerObject = Instantiate(playerInfoBanner, topBanner);
             PlayerInfoBanner lPlayerInfoBanner = lPlayerInfoBannerObject.GetComponent<PlayerInfoBanner>();
 
-            lPlayerInfoBanner.InitBannerInfo(playerList[i].Pseudo, 0.ToString());
+            lPlayerInfoBanner.InitBannerInfo(playerList[i]);
 
             playerInfoBannerList.Add(lPlayerInfoBanner);
         }

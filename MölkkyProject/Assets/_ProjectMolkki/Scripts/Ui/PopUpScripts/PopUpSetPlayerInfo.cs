@@ -9,6 +9,7 @@ public class PopUpSetPlayerInfo : PopUpObject
 {
     [Header("Buttons")]
     [SerializeField] private Button buttonRemove = null;
+    [SerializeField] private Button buttonAccept = null;
     [Space]
     [Header("PseudoRelative")]
     [SerializeField] private TMP_InputField pseudoField = null;
@@ -16,6 +17,7 @@ public class PopUpSetPlayerInfo : PopUpObject
     private PlayerInfo currentPlayerInfo = null;
 
     public event Action<PlayerInfo> onRemoveClicked = default;
+    public event Action<PlayerInfo> onAcceptClicked = default;
 
     public override void EndAppear()
     {
@@ -27,6 +29,16 @@ public class PopUpSetPlayerInfo : PopUpObject
     private void AddButtonEvent()
     {
         buttonRemove.onClick.AddListener(OnRemoveClicked);
+        buttonAccept.onClick.AddListener(OnAcceptClicked);
+    }
+
+    private void OnAcceptClicked()
+    {
+        buttonAccept.onClick.RemoveListener(OnAcceptClicked);
+
+        onAcceptClicked?.Invoke(currentPlayerInfo);
+
+        ClosePopUp();
     }
 
     private void OnRemoveClicked()

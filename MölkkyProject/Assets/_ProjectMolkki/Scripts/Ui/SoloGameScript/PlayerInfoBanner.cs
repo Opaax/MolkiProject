@@ -13,17 +13,22 @@ public class PlayerInfoBanner : MonoBehaviour
     [Header("Transform")]
     [SerializeField] private RectTransform _rect = null;
 
+    private PlayerInfo _player = default;
+
     public RectTransform Rect { get => _rect;}
+    public PlayerInfo Player { get => _player;}
 
     private void Start()
     {
         transform.DOScale(0, 0);
     }
 
-    public void InitBannerInfo(string nameInfo, string scoreInfo)
+    public void InitBannerInfo(PlayerInfo player)
     {
-        nameText.text = nameInfo;
-        scoreText.text = scoreInfo;
+        nameText.text = player.Pseudo;
+        scoreText.text = player.Score.ToString();
+
+        _player = player;
     }
 
     public void SpawnBannerInfo (float delay)
