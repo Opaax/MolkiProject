@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,17 +21,27 @@ public class SoloGameScreen : ScreenObject
     [Header("BannerInfoMaths")]
     [SerializeField] private float spacement = 50f;
     [SerializeField] private float delaySpawn = .4f;
+    [Header("Tweens")]
+    [Header("Point Selected")]
+    [SerializeField] private float timeToUnScale = .1f;
+    [SerializeField] private Ease easeUnScale = Ease.InOutSine;
+    [SerializeField] private float timeToScaleUp = .3f;
+    [SerializeField] private Ease easeScaleUP = Ease.InOutSine;
+    [SerializeField] private float delayBetweenScales = .4f;
 
-    private int currentPointSelected = default;
+    private int _currentPointSelected = default;
 
-    private PlayerInfoBanner currentPlayer = default;
+    private PlayerInfoBanner _currentPlayer = default;
 
     private List<PlayerInfoBanner> playerInfoBannerList = new List<PlayerInfoBanner>();
     private List<ButtonPoint> buttonsPoint = new List<ButtonPoint>();
 
+
     public event Action onQuitClicked = default;
     public event Action onMissedClicked = default;
     public event Action<int> onPointClicked = default;
+    public PlayerInfoBanner CurrentPlayer { get => _currentPlayer; }
+    public int CurrentPointSelected { get => _currentPointSelected; }
 
     public void InitPlayer(List<PlayerInfo> playerList)
     {
@@ -60,13 +71,20 @@ public class SoloGameScreen : ScreenObject
             playerInfoBannerList[i].SpawnBannerInfo(delaySpawn * i);
         }
 
-        currentPlayer = playerInfoBannerList[0];
+        _currentPlayer = playerInfoBannerList[0];
     }
 
     public void InitButtons()
     {
         quitbutton.onClick.AddListener(OnQuitClicked);
         missedButton.onClick.AddListener(OnMissedClicked);
+
+        GetAllEventButtonPoint();
+    }
+
+    public void UpdateCurrentPlayer()
+    {
+        _currentPlayer.UpdateInfos();
 
         GetAllEventButtonPoint();
     }
@@ -89,7 +107,7 @@ public class SoloGameScreen : ScreenObject
             buttonsPoint[i].onPointClicked -= ButtonPoint_OnClicked;
         }
 
-        buttonsPoint.Clear();
+        //buttonsPoint.Clear();
     }
     #endregion
     #region ButtonEvents
@@ -97,18 +115,26 @@ public class SoloGameScreen : ScreenObject
     {
         pointButton.onClick.RemoveAllListeners();
 
-        currentPointSelected = pointClicked;
+        _currentPointSelected = pointClicked;
+
+        ModifyButtonFeedBack(_currentPointSelected);
 
         pointButton.onClick.AddListener(OnPointClicked);
     }
 
     private void OnPointClicked()
     {
-        onPointClicked?.Invoke(currentPointSelected);
+        RemoveAllEventButtonPoint();
+
+        _currentPointSelected = 0;
+
+        onPointClicked?.Invoke(_currentPointSelected);
     }
 
     private void OnMissedClicked()
     {
+        RemoveAllEventButtonPoint();
+
         onMissedClicked?.Invoke();
     }
 
@@ -141,7 +167,12 @@ public class SoloGameScreen : ScreenObject
     }
     #endregion
 
-
+    private void ModifyButtonFeedBack(int currentPointSelected)
+    {
+        pointButton.transform.DOScale(Vector3.zero, timeToUnScale).SetEase(easeUnScale);
+        pointButton.GetComponentInChildren<TextMeshProUGUI>().text = String.Format("{0} points", currentPointSelected);
+        pointButton.transform.DOScale(Vector3.one, timeToScaleUp).SetEase(easeScaleUP).SetAutoKill(true).SetDelay(delayBetweenScales);
+    }
     public override void Disappear()
     {
         base.Disappear();
