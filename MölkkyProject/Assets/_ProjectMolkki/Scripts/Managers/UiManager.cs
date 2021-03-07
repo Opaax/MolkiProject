@@ -15,6 +15,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] PopUpNewGame popUpNewGame = null;
     [SerializeField] PopUpSetPlayerInfo popUpPlayerInfo = null;
     [SerializeField] PopUpAllPlayerNotSet popUpAllPlayerNotSet = null;
+    [SerializeField] PopUpComfirmScore popUpConfirmScore = null;
 
     private ScreenManager screenManager = new ScreenManager();
     private GameManagerSolo gameManagerSolo = default;
@@ -89,11 +90,21 @@ public class UiManager : MonoBehaviour
 
     private void AddPopUpAllPlayerNotSet()
     {
-        popUpAllPlayerNotSet.OnClosePopUp += popUpAllPlayerNotSet_OnClose;
+        popUpAllPlayerNotSet.OnClosePopUp += PopUpAllPlayerNotSet_OnClose;
 
         popUpAllPlayerNotSet.Appear();
 
         screenManager.AddActifScreen(popUpAllPlayerNotSet);
+    }
+
+    private void AddPopUpConfirmScore()
+    {
+        popUpConfirmScore.OnClosePopUp += PopUpConfirmScore_OnClose;
+        popUpConfirmScore.OnAppearEnd += PopUpConfirmScore_OnAppearEnd;
+
+        popUpConfirmScore.Appear();
+
+        screenManager.AddActifScreen(popUpConfirmScore);
     }
 
     #endregion
@@ -281,15 +292,47 @@ public class UiManager : MonoBehaviour
     #endregion
 
     #region popUpAllPlayerNotSet
-    private void popUpAllPlayerNotSet_OnClose()
+    private void PopUpAllPlayerNotSet_OnClose()
     {
-        popUpAllPlayerNotSet.OnClosePopUp -= popUpAllPlayerNotSet_OnClose;
+        popUpAllPlayerNotSet.OnClosePopUp -= PopUpAllPlayerNotSet_OnClose;
 
         screenManager.RemoveInactifScreen(popUpAllPlayerNotSet);
 
         soloScreen.ResetEventButton();
         soloScreen.ResetEventPlayerInfo();
     }
+    #endregion
+
+    #region PopUpConfirmScore
+    private void PopUpConfirmScore_OnClose()
+    {
+        popUpConfirmScore.OnClosePopUp -= PopUpConfirmScore_OnClose;
+    }
+
+    private void PopUpConfirmScore_OnAppearEnd(ScreenObject sender)
+    {
+        popUpConfirmScore.OnAppearEnd -= PopUpConfirmScore_OnAppearEnd;
+
+        popUpConfirmScore.OnClosePopUp += PopUpConfirmScore_OnClosed;
+        popUpConfirmScore.OnConfirmClick += PopUpConfirmScore_OnConfirm;
+    }
+
+    private void PopUpConfirmScore_OnConfirm()
+    {
+        popUpConfirmScore.OnConfirmClick -= PopUpConfirmScore_OnConfirm;
+
+        gameManagerSolo.onConfirmPoint += GameManagerSolo_OnConfirmPoint;
+
+        gameManagerSolo.ValidScore();
+    }
+
+    private void PopUpConfirmScore_OnClosed()
+    {
+        popUpConfirmScore.OnClosePopUp -= PopUpConfirmScore_OnClosed;
+
+        screenManager.RemoveInactifScreen(popUpConfirmScore);
+    }
+
     #endregion
 
     #region GameManagerSoloGameMethodes
@@ -304,9 +347,18 @@ public class UiManager : MonoBehaviour
     private void GameManager_OnInitEnd()
     {
         gameManagerSolo.onQuit += GameManagerSolo_OnQuit;
+        gameManagerSolo.onConfirmPoint += GameManagerSolo_OnConfirmPoint;
 
         RemoveSoloScreen();
         AddSoloGameScreen();
+    }
+
+    private void GameManagerSolo_OnConfirmPoint(int point, PlayerInfo player)
+    {
+        gameManagerSolo.onConfirmPoint -= GameManagerSolo_OnConfirmPoint;
+
+        popUpConfirmScore.SetUpPopUp(player, point);
+        AddPopUpConfirmScore();
     }
 
     private void GameManagerSolo_OnQuit()
@@ -337,8 +389,14 @@ public class UiManager : MonoBehaviour
         soloScreen.OnRemove -= SoloScreen_OnRemovingPlayer;
         soloScreen.OnCantRemove -= SoloScreen_OnCantRemovingPlayer;
 
-        popUpAllPlayerNotSet.OnClosePopUp -= popUpAllPlayerNotSet_OnClose;
+        popUpAllPlayerNotSet.OnClosePopUp -= PopUpAllPlayerNotSet_OnClose;
 
         gameManagerSolo.onQuit -= GameManagerSolo_OnQuit;
+        gameManagerSolo.onConfirmPoint -= GameManagerSolo_OnConfirmPoint;
+
+        popUpConfirmScore.OnClosePopUp -= PopUpConfirmScore_OnClose;
+        popUpConfirmScore.OnAppearEnd -= PopUpConfirmScore_OnAppearEnd;
+        popUpConfirmScore.OnClosePopUp -= PopUpConfirmScore_OnClosed;
+        popUpConfirmScore.OnConfirmClick -= PopUpConfirmScore_OnConfirm;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,6 +13,9 @@ public class PlayerInfoBanner : MonoBehaviour
     [Space]
     [Header("Transform")]
     [SerializeField] private RectTransform _rect = null;
+    [Space]
+    [Header("Miss settings")]
+    [SerializeField] private MissInfoView[] missInfoView = default;
 
     private PlayerInfo _player = default;
 
@@ -35,4 +39,15 @@ public class PlayerInfoBanner : MonoBehaviour
     {
         transform.DOScale(1, .2f).SetDelay(delay).SetEase(Ease.InBounce);
     }
+
+    public void UpdateInfos()
+    {
+        for (int i = 0; i < _player.Missed; i++)
+        {
+            missInfoView[i].AppearImage();
+        }
+
+        scoreText.text = _player.Score.ToString();
+    }
 }
+

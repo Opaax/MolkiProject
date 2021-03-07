@@ -11,6 +11,7 @@ public class GameManagerSolo : MonoBehaviour
 
     public event Action onInitEnd = default;
     public event Action onQuit = default;
+    public event Action<int,PlayerInfo> onConfirmPoint = default;
 
     public void InitGame(List<PlayerInfo> allPlayer, SoloGameScreen soloGameScreen)
     {
@@ -20,6 +21,18 @@ public class GameManagerSolo : MonoBehaviour
         gameScreen.OnAppearEnd += SoloScreenGame_OnEndAppear;
 
         onInitEnd?.Invoke();
+    }
+
+    public void ValidScore()
+    {
+        gameScreen.CurrentPlayer.Player.Score += gameScreen.CurrentPointSelected;
+
+        if(gameScreen.CurrentPointSelected == 0)
+        {
+            gameScreen.CurrentPlayer.Player.Missed++;
+        }
+
+        gameScreen.UpdateCurrentPlayer();
     }
 
     #region SoloGameScreen Methodes
@@ -37,19 +50,17 @@ public class GameManagerSolo : MonoBehaviour
 
     private void SoloScreenGame_OnMissedClicked()
     {
-        this.Log("OnMissedClicked");
+        onConfirmPoint?.Invoke(0, gameScreen.CurrentPlayer.Player);
     }
 
     private void SoloScreenGame_OnQuitClicked()
     {
-        this.Log("OnQuitClicked");
-
         onQuit?.Invoke();
     }
 
     private void SoloScreenGame_OnPointClicked(int point)
     {
-        this.Log($"on{point}PointClicked");
+        onConfirmPoint?.Invoke(point,gameScreen.CurrentPlayer.Player);
     }
     #endregion
 

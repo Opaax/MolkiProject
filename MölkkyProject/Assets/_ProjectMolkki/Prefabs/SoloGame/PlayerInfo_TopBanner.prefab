@@ -615,6 +615,25 @@ MonoBehaviour:
   nameText: {fileID: 3266816361716835785}
   scoreText: {fileID: 3266816362377178043}
   _rect: {fileID: 3266816362987886647}
+  missInfoView:
+  - missedTransform: {fileID: 2418333577497635120}
+    imageFeedBack: {fileID: 8736411909966885542}
+    timeToFade: 0.3
+    easeFade: 17
+    colorToFade: {r: 1, g: 0, b: 0, a: 1}
+    usefadeColor: 1
+  - missedTransform: {fileID: 5586374497733182805}
+    imageFeedBack: {fileID: 289414369717064621}
+    timeToFade: 0.3
+    easeFade: 17
+    colorToFade: {r: 1, g: 0, b: 0, a: 1}
+    usefadeColor: 1
+  - missedTransform: {fileID: 1751734808272203097}
+    imageFeedBack: {fileID: 4427223434408402963}
+    timeToFade: 0.3
+    easeFade: 17
+    colorToFade: {r: 1, g: 0, b: 0, a: 1}
+    usefadeColor: 1
 --- !u!1 &6399654709337427439
 GameObject:
   m_ObjectHideFlags: 0

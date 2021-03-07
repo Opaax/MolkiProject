@@ -32,6 +32,7 @@ public class PlayerInfo : MonoBehaviour
     private string _defaultString = "Click Here";
 
     private int _score = 0;
+    private int _missed = 0;
 
     public event Action<PlayerInfo> onPlayerInfoClicked = default;
 
@@ -41,6 +42,7 @@ public class PlayerInfo : MonoBehaviour
     public string DefaultString { get => _defaultString; set => _defaultString = value; }
     public bool IsReady { get => _isReady; set => _isReady = value; }
     public int Score { get => _score; set => _score = value; }
+    public int Missed { get => _missed; set => _missed = value; }
 
     private void Start()
     {
