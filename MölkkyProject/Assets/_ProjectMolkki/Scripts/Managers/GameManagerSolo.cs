@@ -5,9 +5,13 @@ using UnityEngine;
 
 public class GameManagerSolo : MonoBehaviour
 {
+    private int maxPoints = 13;
+    private int maxMiss = 3;
+
     private SoloGameScreen gameScreen = null;
 
     private List<PlayerInfo> allPlayer = default;
+    private List<PlayerInfo> playerFinihedGame = default;
 
     public event Action onInitEnd = default;
     public event Action onQuit = default;
@@ -26,13 +30,30 @@ public class GameManagerSolo : MonoBehaviour
     public void ValidScore()
     {
         gameScreen.CurrentPlayer.Player.Score += gameScreen.CurrentPointSelected;
+        gameScreen.onPlayerWin -= GameScreenSolo_OnPlayerWin;
+        gameScreen.onPlayerOverPoint -= GameScreenSolo_OnPlayerOverPoint;
 
-        if(gameScreen.CurrentPointSelected == 0)
+        if (gameScreen.CurrentPointSelected == 0)
         {
             gameScreen.CurrentPlayer.Player.Missed++;
         }
 
+        gameScreen.onPlayerWin += GameScreenSolo_OnPlayerWin;
+        gameScreen.onPlayerOverPoint += GameScreenSolo_OnPlayerOverPoint;
+
         gameScreen.UpdateCurrentPlayer();
+    }
+
+    private void GameScreenSolo_OnPlayerOverPoint(PlayerInfo player)
+    {
+        gameScreen.CurrentPlayer.Player.Score = maxPoints / 2;
+
+        gameScreen.UpdateCurrentPlayer();
+    }
+
+    private void GameScreenSolo_OnPlayerWin(PlayerInfo player)
+    {
+        
     }
 
     #region SoloGameScreen Methodes
@@ -44,7 +65,7 @@ public class GameManagerSolo : MonoBehaviour
         gameScreen.onQuitClicked += SoloScreenGame_OnQuitClicked;
         gameScreen.onMissedClicked += SoloScreenGame_OnMissedClicked;
 
-        gameScreen.InitPlayer(allPlayer);
+        gameScreen.InitPlayers(allPlayer, maxPoints, maxMiss);
         gameScreen.InitButtons();
     }
 
@@ -69,5 +90,7 @@ public class GameManagerSolo : MonoBehaviour
         gameScreen.onPointClicked -= SoloScreenGame_OnPointClicked;
         gameScreen.onQuitClicked -= SoloScreenGame_OnQuitClicked;
         gameScreen.onMissedClicked -= SoloScreenGame_OnMissedClicked;
+        gameScreen.onPlayerWin -= GameScreenSolo_OnPlayerWin;
+        gameScreen.onPlayerOverPoint -= GameScreenSolo_OnPlayerOverPoint;
     }
 }

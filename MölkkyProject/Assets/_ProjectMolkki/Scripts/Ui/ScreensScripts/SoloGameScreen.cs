@@ -30,6 +30,9 @@ public class SoloGameScreen : ScreenObject
     [SerializeField] private float delayBetweenScales = .4f;
 
     private int _currentPointSelected = default;
+    private int currentIndexPlayer = 0;
+    private int pointToWin = 0;
+    private int maxMiss = 0;
 
     private PlayerInfoBanner _currentPlayer = default;
 
@@ -39,11 +42,14 @@ public class SoloGameScreen : ScreenObject
 
     public event Action onQuitClicked = default;
     public event Action onMissedClicked = default;
+    public event Action<PlayerInfo> onPlayerWin = default;
+    public event Action<PlayerInfo> onPlayerOverPoint = default;
     public event Action<int> onPointClicked = default;
     public PlayerInfoBanner CurrentPlayer { get => _currentPlayer; }
     public int CurrentPointSelected { get => _currentPointSelected; }
 
-    public void InitPlayer(List<PlayerInfo> playerList)
+
+    public void InitPlayers(List<PlayerInfo> playerList, int maxPointToWin, int maxMissToLose)
     {
         for (int i = playerList.Count - 1; i >= 0; i--)
         {
@@ -71,7 +77,12 @@ public class SoloGameScreen : ScreenObject
             playerInfoBannerList[i].SpawnBannerInfo(delaySpawn * i);
         }
 
-        _currentPlayer = playerInfoBannerList[0];
+        currentIndexPlayer = 0;
+
+        pointToWin = maxPointToWin;
+        maxMiss = maxMissToLose;
+
+        _currentPlayer = playerInfoBannerList[currentIndexPlayer];
     }
 
     public void InitButtons()
@@ -86,7 +97,37 @@ public class SoloGameScreen : ScreenObject
     {
         _currentPlayer.UpdateInfos();
 
+        if (_currentPlayer.Player.Score == pointToWin)
+        {
+            onPlayerWin?.Invoke(_currentPlayer.Player);
+
+            return;
+        }
+        else if(_currentPlayer.Player.Score > pointToWin)
+        {
+            onPlayerOverPoint?.Invoke(_currentPlayer.Player);
+
+            return;
+        }
+
+        if (_currentPlayer.Player.Missed == maxMiss)
+        {
+
+        }
+
+        NextPlayer();
+
         GetAllEventButtonPoint();
+    }
+
+    public void NextPlayer()
+    {
+        if (currentIndexPlayer >= playerInfoBannerList.Count -1) currentIndexPlayer = 0;
+        else currentIndexPlayer++;
+
+        _currentPlayer = playerInfoBannerList[currentIndexPlayer];
+
+        _currentPointSelected = 0;
     }
 
     #region ButtonsPointEvent
@@ -124,9 +165,7 @@ public class SoloGameScreen : ScreenObject
 
     private void OnPointClicked()
     {
-        RemoveAllEventButtonPoint();
-
-        _currentPointSelected = 0;
+        RemoveAllEventButtonPoint(); 
 
         onPointClicked?.Invoke(_currentPointSelected);
     }

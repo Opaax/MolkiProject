@@ -40,7 +40,6 @@ public class PopUpComfirmScore : PopUpObject
         confirmButton.onClick.RemoveListener(OnConfirmClicked);
 
         feedBackTween.SetLoops(0);
-        Debug.Log(feedBackTween.target);
         ResetLoopTransForm((Transform)feedBackTween.target);
         feedBackTween.Complete();
 
