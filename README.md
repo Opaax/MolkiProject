@@ -4,13 +4,13 @@ With my family, we often play Molkky. Never found a great app to count our score
 
 meanwhile, I did, and yet not done:
 
--Solo game (solo mean free for all)
+- Solo game (solo mean free for all)
 1. adding/removing the player
 2. start the game
 3. count points and miss (WIP)
 4. Some UI effect
    
--Team game
+- Team game
   1. I saw in the official rules there is a team game, I looking to develop this too
 
 - Rules menu
