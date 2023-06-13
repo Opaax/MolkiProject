@@ -11,7 +11,7 @@ meanwhile, I did, and yet not done:
 4. Some UI effect
    
 - Team game
-  1. I saw in the official rules there is a team game, I looking to develop this too
+1. I saw in the official rules there is a team game, I looking to develop this too
 
 - Rules menu
 
