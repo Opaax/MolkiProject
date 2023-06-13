@@ -2,7 +2,7 @@
 
 With my family, we often play Molkky. Never found a great app to count our score. We made a physical score counter with pearls.
 
-meanwhile, I did, and yet not done:
+meanwhile, I did this project and yet not done:
 
 - Solo game (solo mean free for all)
 1. adding/removing the player
